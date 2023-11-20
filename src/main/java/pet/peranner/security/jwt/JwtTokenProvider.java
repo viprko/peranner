@@ -24,7 +24,7 @@ import pet.peranner.security.CustomUserDetailsService;
 public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey;
-    @Value("${security.jwt.token.expire-length:3600000}")
+    @Value("${security.jwt.token.expire-length:604800000}")
     private long validityInMilliseconds;
     private final CustomUserDetailsService userDetailsService;
 
