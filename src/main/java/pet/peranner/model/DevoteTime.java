@@ -1,6 +1,8 @@
 package pet.peranner.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,7 +17,7 @@ import lombok.Setter;
 @Setter
 public class DevoteTime {
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_email")
     private User user;
     @ManyToOne
     @JoinColumn(name = "task_id")
@@ -24,10 +26,12 @@ public class DevoteTime {
     @JoinColumn(name = "place_id")
     private Place place;
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String title;
     private String description;
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
     private LocalDateTime actualFinishTime;
+    private boolean isCompleted;
 }

@@ -1,14 +1,14 @@
 CREATE TABLE IF NOT EXISTS `events`
 (
-    `id`                    VARCHAR(500) NOT NULL,
+    `id`                    BIGINT NOT NULL AUTO_INCREMENT,
     `title`                 VARCHAR(255) DEFAULT "title",
     `description`           VARCHAR(500) DEFAULT "description",
     `start_time`            DATETIME NOT NULL,
     `finish_time`           DATETIME NOT NULL,
     `actual_finish_time`    DATETIME NOT NULL,
-    `user_id`               BIGINT NOT NULL,
-    `place_id`              VARCHAR(500) DEFAULT NULL,
+    `user_email`            VARCHAR(500) NOT NULL,
+    `place_id`              BIGINT DEFAULT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `event-user_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
-    CONSTRAINT `event-place_fk` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`)
+    CONSTRAINT `event_user_fk` FOREIGN KEY (`user_email`) REFERENCES `users` (`email`),
+    CONSTRAINT `event_place_fk` FOREIGN KEY (`place_id`) REFERENCES `places` (`id`)
 );

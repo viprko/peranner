@@ -22,9 +22,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers("/main", "/register", "/login")
+                                .requestMatchers(
+                                        "/main",
+                                        "/register",
+                                        "/login",
+                                        "/swagger-resources/**",
+                                        "/api-docs/**",
+                                        "/swagger-ui/**")
                                 .permitAll()
                                 .anyRequest().authenticated())
                 .apply(new JwtConfigurer(jwtTokenProvider));

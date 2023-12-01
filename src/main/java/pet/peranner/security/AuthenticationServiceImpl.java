@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pet.peranner.dto.request.UserRegistrationDto;
 import pet.peranner.exception.AuthenticationException;
+import pet.peranner.exception.UserAlreadyExistException;
 import pet.peranner.model.User;
 import pet.peranner.service.UserService;
 
@@ -21,7 +22,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public User register(UserRegistrationDto userRegistrationDto) {
         if (userService.isPresentByEmail(userRegistrationDto.getEmail())) {
-            throw new RuntimeException("User with such email already exist");
+            throw new UserAlreadyExistException("User with such email already exist");
         }
         User user = new User();
         user

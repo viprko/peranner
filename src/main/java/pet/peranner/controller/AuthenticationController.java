@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import pet.peranner.dto.request.UserLoginDto;
 import pet.peranner.dto.request.UserRegistrationDto;
 import pet.peranner.exception.AuthenticationException;
-import pet.peranner.exception.PasswordsNotMatchesException;
-import pet.peranner.exception.UserAlreadyExistException;
 import pet.peranner.model.User;
 import pet.peranner.security.AuthenticationService;
 import pet.peranner.security.jwt.JwtTokenProvider;
@@ -29,16 +27,8 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<Object> register(
             @RequestBody @Valid UserRegistrationDto userRegistrationDto) {
-        try {
-            User registeredUser = authenticationService.register(userRegistrationDto);
-            return new ResponseEntity<>(userMapper.toDto(registeredUser), HttpStatus.OK);
-        } catch (UserAlreadyExistException e) {
-            return new ResponseEntity<>(Map.of("error", "User with this email already exists"),
-                    HttpStatus.CONFLICT);
-        } catch (PasswordsNotMatchesException e) {
-            return new ResponseEntity<>(Map.of("error", "Passwords do not match"),
-                    HttpStatus.BAD_REQUEST);
-        }
+        User registeredUser = authenticationService.register(userRegistrationDto);
+        return new ResponseEntity<>(userMapper.toDto(registeredUser), HttpStatus.OK);
     }
 
     @PostMapping("/login")

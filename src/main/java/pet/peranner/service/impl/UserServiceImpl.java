@@ -19,20 +19,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    @Override
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findById(email);
     }
 
     @Override
-    public User updateRole(Long id, User.Role role) {
+    public User updateRole(String email, User.Role role) {
         User userFromDb =
-                userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Cannot "
-                        + "find user with id: " + id));
+                userRepository.findById(email).orElseThrow(() -> new NoSuchElementException(
+                        "Cannot "
+                        + "find user with id: " + email));
         userFromDb.setRole(role);
         return userFromDb;
     }
@@ -43,12 +39,11 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("User can't be null");
         }
         User userFromDb =
-                userRepository.findById(user.getId()).orElseThrow(() -> new NoSuchElementException(
-                        "Cannot find user with id: " + user.getId()));
+                userRepository.findById(user.getEmail())
+                        .orElseThrow(() -> new NoSuchElementException(
+                                "Cannot find user with email: " + user.getEmail()));
         userFromDb
                 .setAge(user.getAge())
-                .setPassword(user.getPassword())
-                .setEmail(user.getEmail())
                 .setFirstName(user.getFirstName())
                 .setLastName(user.getLastName());
         return save(userFromDb);
@@ -56,6 +51,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isPresentByEmail(String email) {
-        return userRepository.findByEmail(email).isPresent();
+        return userRepository.findById(email).isPresent();
     }
 }

@@ -5,7 +5,7 @@ import pet.peranner.lib.ValidEmail;
 import pet.peranner.lib.ValidPassword;
 
 @Data
-@ValidPassword(message = "Passwords doesn't match")
+@ValidPassword
 public class UserRegistrationDto {
     private String firstName;
     private String lastName;

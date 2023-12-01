@@ -8,7 +8,7 @@ import pet.peranner.model.User;
 
 @Mapper(config = MapperConfig.class)
 public interface UserMapper {
-    UserResponseDto toDto(User user);
+    public UserResponseDto toDto(User user);
 
-    User toEntity(UserRegistrationDto userRegistrationDto);
+    public User toEntity(UserRegistrationDto requestDto);
 }
