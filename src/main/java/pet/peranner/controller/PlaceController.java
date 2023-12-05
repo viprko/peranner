@@ -27,7 +27,7 @@ public class PlaceController {
     private final PlaceService placeService;
     private final PlaceMapper placeMapper;
 
-    @PostMapping("/save")
+    @PostMapping
     @CurrentUser
     public ResponseEntity<PlaceResponseDto> save(@RequestBody PlaceRequestDto requestDto,
                                                  User currentUser) {
@@ -54,7 +54,7 @@ public class PlaceController {
         return ResponseEntity.ok(places);
     }
 
-    @PatchMapping("/{id}/change-coordinates")
+    @PatchMapping("/{id}")
     public ResponseEntity<PlaceResponseDto> update(@PathVariable("id") Long id,
                                                    @RequestBody PlaceRequestDto requestDto) {
         return ResponseEntity.ok(

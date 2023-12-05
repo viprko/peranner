@@ -29,7 +29,7 @@ public class TaskController {
     private final TaskService taskService;
     private final TaskMapper taskMapper;
 
-    @PostMapping("/save")
+    @PostMapping
     @CurrentUser
     public ResponseEntity<TaskResponseDto> save(@RequestBody TaskRequestDto requestDto,
                                                 User currentUser) {
