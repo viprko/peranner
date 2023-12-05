@@ -42,7 +42,8 @@ public class PlaceServiceImpl implements PlaceService {
         Place placeFromDb =
                 placeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("There "
                         + "is no place with id: " + id));
-        Optional.ofNullable(place.getCoordinates()).ifPresent(placeFromDb::setCoordinates);
+        Optional.ofNullable(place.getLatitude()).ifPresent(placeFromDb::setLatitude);
+        Optional.ofNullable(place.getLongitude()).ifPresent(placeFromDb::setLongitude);
         Optional.ofNullable(place.getTitle()).ifPresent(placeFromDb::setTitle);
         return placeRepository.save(placeFromDb);
     }

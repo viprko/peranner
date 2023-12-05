@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class PlaceRequestDto {
-    private String coordinates;
+    private Double latitude;
+    private Double longitude;
     private String title;
 }

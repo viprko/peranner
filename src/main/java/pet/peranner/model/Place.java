@@ -19,7 +19,8 @@ public class Place {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String coordinates;
+    private Double latitude;
+    private Double longitude;
     @ManyToOne
     @JoinColumn(name = "user_email")
     private User user;
