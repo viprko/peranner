@@ -35,13 +35,13 @@ public class DevoteTimeController {
         return devoteTimeMapper.toDto(devoteTimeService.save(devoteTime));
     }
 
-    @GetMapping("/{id")
+    @GetMapping("/{id}")
     public DevoteTime findById(@PathVariable("id") Long id) {
         return devoteTimeService.findById(id).orElseThrow(() -> new NoSuchElementException(
                 "DevoteTime with id: " + id + " doesn't exist"));
     }
 
-    @GetMapping("/my")
+    @GetMapping
     @CurrentUser
     public List<DevoteTimeResponseDto> findAllByCurrentUser(User user) {
         return devoteTimeService.findAllByUserEmail(user.getEmail())

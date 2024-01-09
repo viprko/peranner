@@ -1,5 +1,6 @@
 package pet.peranner.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -46,5 +47,11 @@ public class DevoteTimeServiceImpl implements DevoteTimeService {
     @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public List<DevoteTime> findByPeriod(LocalDateTime periodStart, LocalDateTime periodEnd,
+                                         String email) {
+        return repository.findByPeriod(periodStart, periodEnd, email);
     }
 }

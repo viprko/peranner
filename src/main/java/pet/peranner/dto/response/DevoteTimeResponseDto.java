@@ -13,4 +13,6 @@ public class DevoteTimeResponseDto {
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
     private LocalDateTime actualFinishTime;
+    private boolean isOutdated;
+    private boolean isCompleted;
 }

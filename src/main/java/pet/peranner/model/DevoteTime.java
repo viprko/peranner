@@ -34,4 +34,5 @@ public class DevoteTime {
     private LocalDateTime finishTime;
     private LocalDateTime actualFinishTime;
     private boolean isCompleted;
+    private boolean isOutdated;
 }

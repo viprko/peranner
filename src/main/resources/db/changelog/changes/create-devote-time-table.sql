@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `devote_time`
     `task_id`               BIGINT DEFAULT NULL,
     `place_id`              BIGINT DEFAULT NULL,
     `is_completed`          BIT NOT NULL,
+    `is_outdated`           BIT NOT NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT `devote_time-user_fk`    FOREIGN KEY (`user_email`)  REFERENCES `users` (`email`),
     CONSTRAINT `devote_time-place_fk`   FOREIGN KEY (`place_id`)    REFERENCES `places` (`id`),
