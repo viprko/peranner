@@ -7,6 +7,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pet.peranner.model.DevoteTime;
+import pet.peranner.model.User;
 import pet.peranner.repository.DevoteTimeRepository;
 import pet.peranner.service.DevoteTimeService;
 
@@ -26,8 +27,8 @@ public class DevoteTimeServiceImpl implements DevoteTimeService {
     }
 
     @Override
-    public List<DevoteTime> findAllByUserEmail(String email) {
-        return repository.findAllByUserEmail(email);
+    public List<DevoteTime> findAllByUser(User user) {
+        return repository.findAllByUser(user);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class DevoteTimeServiceImpl implements DevoteTimeService {
 
     @Override
     public List<DevoteTime> findByPeriod(LocalDateTime periodStart, LocalDateTime periodEnd,
-                                         String email) {
-        return repository.findByPeriod(periodStart, periodEnd, email);
+                                         User currentUser) {
+        return repository.findByPeriod(periodStart, periodEnd, currentUser);
     }
 }

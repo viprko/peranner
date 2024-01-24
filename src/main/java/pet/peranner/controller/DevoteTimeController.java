@@ -43,8 +43,8 @@ public class DevoteTimeController {
 
     @GetMapping
     @CurrentUser
-    public List<DevoteTimeResponseDto> findAllByCurrentUser(User user) {
-        return devoteTimeService.findAllByUserEmail(user.getEmail())
+    public List<DevoteTimeResponseDto> findAllByUser(User currentUser) {
+        return devoteTimeService.findAllByUser(currentUser)
                 .stream()
                 .map(devoteTimeMapper::toDto)
                 .toList();

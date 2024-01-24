@@ -20,6 +20,6 @@ public class MonthPeriodStrategy implements PeriodStrategy {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime periodStart = now.withDayOfMonth(1).toLocalDate().atStartOfDay();
         LocalDateTime periodEnd = periodStart.plusMonths(PERIOD_DURATION_IN_MONTHS);
-        return devoteTimeRepository.findByPeriod(periodStart, periodEnd, currentUser.getEmail());
+        return devoteTimeRepository.findByPeriod(periodStart, periodEnd, currentUser);
     }
 }

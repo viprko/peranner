@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pet.peranner.model.Place;
+import pet.peranner.model.User;
 import pet.peranner.repository.PlaceRepository;
 import pet.peranner.service.PlaceService;
 
@@ -32,8 +33,8 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public List<Place> findAllByUserEmail(String email) {
-        return placeRepository.findAllByUserEmail(email);
+    public List<Place> findAllByUser(User user) {
+        return placeRepository.findAllByUser(user);
     }
 
     @Override

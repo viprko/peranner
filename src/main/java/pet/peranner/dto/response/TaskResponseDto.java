@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 public class TaskResponseDto {
-    private String id;
+    private Long id;
     private String title;
     private String description;
+    private LocalDate startDate;
     private LocalDate dueDate;
     private boolean isCompleted;
     private Long userId;
-    private int sequenceNumber;
 }

@@ -1,5 +1,6 @@
 package pet.peranner.service.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -19,6 +20,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public Task save(Task task) {
+        task.setStartDate(LocalDate.now());
         return taskRepository.save(task);
     }
 
@@ -47,8 +49,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public List<Task> findAllByUserEmail(String email) {
-        return taskRepository.findAllByUserEmail(email);
+    public List<Task> findAllByUser(User user) {
+        return taskRepository.findAllByUser(user);
     }
 
     @Override

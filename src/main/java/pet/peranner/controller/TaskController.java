@@ -60,9 +60,8 @@ public class TaskController {
 
     @GetMapping
     @CurrentUser
-    public ResponseEntity<List<TaskResponseDto>> getAllByUserEmail(User currentUser) {
-        String userEmail = currentUser.getEmail();
-        List<TaskResponseDto> tasks = taskService.findAllByUserEmail(userEmail).stream()
+    public ResponseEntity<List<TaskResponseDto>> getAllByUser(User currentUser) {
+        List<TaskResponseDto> tasks = taskService.findAllByUser(currentUser).stream()
                 .map(taskMapper::toDto)
                 .toList();
         return ResponseEntity.ok(tasks);
@@ -91,7 +90,7 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}/update")
-    public ResponseEntity<TaskResponseDto> update(@PathVariable Long id,
+    public ResponseEntity<TaskResponseDto> update(@PathVariable("id") Long id,
                                                   @RequestBody TaskRequestDto taskRequestDto) {
         TaskResponseDto task =
                 taskMapper.toDto(taskService.update(id, taskMapper.toEntity(taskRequestDto)));
@@ -99,7 +98,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         taskService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

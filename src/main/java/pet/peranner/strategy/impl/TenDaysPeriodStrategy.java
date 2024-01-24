@@ -20,6 +20,6 @@ public class TenDaysPeriodStrategy implements PeriodStrategy {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime periodStart = now.toLocalDate().atStartOfDay();
         LocalDateTime periodEnd = periodStart.plusDays(PERIOD_DURATION_IN_DAYS);
-        return devoteTimeRepository.findByPeriod(periodStart, periodEnd, currentUser.getEmail());
+        return devoteTimeRepository.findByPeriod(periodStart, periodEnd, currentUser);
     }
 }

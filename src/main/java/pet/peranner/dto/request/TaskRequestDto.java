@@ -8,5 +8,4 @@ public class TaskRequestDto {
     private String title;
     private String description;
     private LocalDate dueDate;
-    private boolean isCompleted;
 }

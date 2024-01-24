@@ -1,5 +1,6 @@
 package pet.peranner.controller;
 
+import jakarta.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,9 @@ public class CalendarController {
     @GetMapping("/plans")
     @CurrentUser
     public ResponseEntity<List<DevoteTimeResponseDto>> showPlansForPeriod(
-            @RequestParam String predefinedPeriod, User user) {
+            @RequestParam(name = "period", defaultValue = "ten-days")
+            @Pattern(regexp = "^(ten-days|month|year)$",
+                    message = "Invalid period") String predefinedPeriod, User user) {
         return ResponseEntity.ok(
                 calendarService.findDevoteTimeForPeriod(predefinedPeriod, user).stream()
                         .map(devoteTimeMapper::toDto)

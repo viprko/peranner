@@ -18,6 +18,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     public List<Task> findByDescription(@Param("user") User user,
                                         @Param("substring") String descriptionSubstring);
 
-    @Query("SELECT t FROM Task t WHERE t.user = :email")
-    public List<Task> findAllByUserEmail(@Param("email")String email);
+    @Query("SELECT t FROM Task t WHERE t.user = :user")
+    public List<Task> findAllByUser(@Param("user")User user);
 }

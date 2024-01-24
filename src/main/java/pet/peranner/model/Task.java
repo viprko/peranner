@@ -27,5 +27,5 @@ public class Task {
     private LocalDate startDate;
     private LocalDate dueDate;
     private boolean isCompleted;
-    private boolean idOutdated;
+    private boolean isOutdated;
 }

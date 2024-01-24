@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pet.peranner.model.Event;
+import pet.peranner.model.User;
 import pet.peranner.repository.EventRepository;
 import pet.peranner.service.EventService;
 
@@ -27,8 +28,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findAllByUserEmail(String email) {
-        return eventRepository.getAllByUserEmail(email);
+    public List<Event> findAllByUser(User user) {
+        return eventRepository.getAllByUser(user);
     }
 
     @Override

@@ -48,6 +48,6 @@ public class CalendarServiceImpl implements CalendarService {
                                                           LocalDate periodEnd, User currentUser) {
         return devoteTimeService.findByPeriod(periodStart.atStartOfDay(),
                 periodEnd.atTime(END_OF_DAY),
-                currentUser.getEmail());
+                currentUser);
     }
 }

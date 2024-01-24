@@ -3,7 +3,6 @@ package pet.peranner.controller;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -44,11 +43,10 @@ public class PlaceController {
         return ResponseEntity.ok(places);
     }
 
-    @GetMapping("/my")
-    public ResponseEntity<List<PlaceResponseDto>> findAllByUserEmail(
-            Authentication authentication) {
-        String userEmail = authentication.getName();
-        List<PlaceResponseDto> places = placeService.findAllByUserEmail(userEmail).stream()
+    @GetMapping
+    @CurrentUser
+    public ResponseEntity<List<PlaceResponseDto>> findAllByUser(User currentUser) {
+        List<PlaceResponseDto> places = placeService.findAllByUser(currentUser).stream()
                 .map(placeMapper::toDto)
                 .toList();
         return ResponseEntity.ok(places);

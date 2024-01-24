@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -47,10 +46,11 @@ public class EventController {
         }
     }
 
-    @GetMapping("/my")
-    public ResponseEntity<List<EventResponseDto>> getAllByUserEmail(Authentication authentication) {
+    @GetMapping
+    @CurrentUser
+    public ResponseEntity<List<EventResponseDto>> getAllByUser(User currentUser) {
         List<EventResponseDto> events =
-                eventService.findAllByUserEmail(authentication.getName()).stream()
+                eventService.findAllByUser(currentUser).stream()
                         .map(eventMapper::toDto)
                         .toList();
         return ResponseEntity.ok(events);

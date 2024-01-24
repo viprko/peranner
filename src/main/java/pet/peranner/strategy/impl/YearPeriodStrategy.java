@@ -20,6 +20,6 @@ public class YearPeriodStrategy implements PeriodStrategy {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime periodStart = now.withDayOfYear(1).toLocalDate().atStartOfDay();
         LocalDateTime periodEnd = periodStart.plusYears(PERIOD_DURATION_IN_YEARS);
-        return devoteTimeRepository.findByPeriod(periodStart, periodEnd, currentUser.getEmail());
+        return devoteTimeRepository.findByPeriod(periodStart, periodEnd, currentUser);
     }
 }

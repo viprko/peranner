@@ -6,9 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import pet.peranner.model.Event;
+import pet.peranner.model.User;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
-    @Query("SELECT e FROM Event e WHERE e.user = :email")
-    List<Event> getAllByUserEmail(@Param("email") String email);
+    @Query("SELECT e FROM Event e WHERE e.user = :user")
+    List<Event> getAllByUser(@Param("user") User user);
 }

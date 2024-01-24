@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `events`
     `description`           VARCHAR(500) DEFAULT "description",
     `start_time`            DATETIME NOT NULL,
     `finish_time`           DATETIME NOT NULL,
-    `actual_finish_time`    DATETIME NOT NULL,
+    `actual_finish_time`    DATETIME ,
     `user_email`            VARCHAR(500) NOT NULL,
     `place_id`              BIGINT DEFAULT NULL,
     PRIMARY KEY (`id`),

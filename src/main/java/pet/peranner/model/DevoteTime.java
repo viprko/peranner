@@ -19,7 +19,6 @@ public class DevoteTime {
     @ManyToOne
     @JoinColumn(name = "user_email")
     private User user;
-    @ManyToOne
     @JoinColumn(name = "task_id")
     private Task task;
     @ManyToOne
