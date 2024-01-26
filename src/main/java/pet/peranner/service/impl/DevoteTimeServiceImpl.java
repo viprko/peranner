@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pet.peranner.model.DevoteTime;
 import pet.peranner.model.User;
@@ -13,6 +14,7 @@ import pet.peranner.service.DevoteTimeService;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class DevoteTimeServiceImpl implements DevoteTimeService {
     private final DevoteTimeRepository repository;
 
@@ -23,7 +25,9 @@ public class DevoteTimeServiceImpl implements DevoteTimeService {
 
     @Override
     public Optional<DevoteTime> findById(Long id) {
-        return repository.findById(id);
+        Optional<DevoteTime> byId = repository.findById(id);
+        log.info("get devote time entity from db: {}", byId.toString());
+        return byId;
     }
 
     @Override

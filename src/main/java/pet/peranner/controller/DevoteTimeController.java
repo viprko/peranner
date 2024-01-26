@@ -2,7 +2,9 @@ package pet.peranner.controller;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,7 @@ import pet.peranner.service.mapper.DevoteTimeMapper;
 @RestController
 @RequestMapping("/devote-time")
 @AllArgsConstructor
+@Slf4j
 public class DevoteTimeController {
     private final DevoteTimeService devoteTimeService;
     private final DevoteTimeMapper devoteTimeMapper;
@@ -36,9 +39,9 @@ public class DevoteTimeController {
     }
 
     @GetMapping("/{id}")
-    public DevoteTime findById(@PathVariable("id") Long id) {
-        return devoteTimeService.findById(id).orElseThrow(() -> new NoSuchElementException(
-                "DevoteTime with id: " + id + " doesn't exist"));
+    public DevoteTimeResponseDto findById(@PathVariable("id") Long id) {
+        return devoteTimeMapper.toDto(devoteTimeService.findById(id).orElseThrow(() -> new NoSuchElementException(
+                "DevoteTime with id: " + id + " doesn't exist")));
     }
 
     @GetMapping
