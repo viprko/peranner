@@ -1,12 +1,13 @@
 package pet.peranner.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Data;
+import pet.peranner.model.Contribute;
 
 @Data
-public class DevoteTimeResponseDto {
+public class ContributeResponseDto {
     private Long id;
-    private Long taskId;
     private Long placeId;
     private String title;
     private String description;
@@ -15,4 +16,5 @@ public class DevoteTimeResponseDto {
     private LocalDateTime actualFinishTime;
     private boolean isOutdated;
     private boolean isCompleted;
+    private List<Contribute.Category> categories;
 }

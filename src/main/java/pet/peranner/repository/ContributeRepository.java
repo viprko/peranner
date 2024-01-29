@@ -6,18 +6,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import pet.peranner.model.DevoteTime;
+import pet.peranner.model.Contribute;
 import pet.peranner.model.User;
 
 @Repository
-public interface DevoteTimeRepository extends JpaRepository<DevoteTime, Long> {
-    @Query("SELECT dt FROM DevoteTime dt WHERE dt.user = :user")
-    public List<DevoteTime> findAllByUser(@Param("user") User user);
+public interface ContributeRepository extends JpaRepository<Contribute, Long> {
+    @Query("SELECT c FROM Contribute c WHERE c.user = :user")
+    public List<Contribute> findAllByUser(@Param("user") User user);
 
-    @Query("SELECT dt FROM DevoteTime dt WHERE dt.user = :user "
-            + "AND dt.startTime >= :periodStart "
-            + "AND dt.finishTime < :periodEnd")
-    public List<DevoteTime> findByPeriod(@Param("periodStart") LocalDateTime periodStart,
+    @Query("SELECT c FROM Contribute c WHERE c.user = :user "
+            + "AND c.startTime >= :periodStart "
+            + "AND c.finishTime < :periodEnd")
+    public List<Contribute> findByPeriod(@Param("periodStart") LocalDateTime periodStart,
                                          @Param("periodEnd") LocalDateTime periodEnd,
                                          @Param("user") User currentUser);
 }

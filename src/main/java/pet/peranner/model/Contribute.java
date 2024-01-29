@@ -1,7 +1,11 @@
 package pet.peranner.model;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,25 +13,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
-@Table(name = "devote_time")
+@Table(name = "contributes")
 @Getter
 @Setter
-@ToString
-public class DevoteTime {
+public class Contribute {
     @ManyToOne
     @JoinColumn(name = "user_email")
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "task_id")
-    private Task task;
-    @ManyToOne
-    @JoinColumn(name = "place_id")
-    private Place place;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,4 +35,23 @@ public class DevoteTime {
     private LocalDateTime actualFinishTime;
     private boolean isCompleted;
     private boolean isOutdated;
+    @ElementCollection(targetClass = Category.class)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "contribute_categories", joinColumns = @JoinColumn(name =
+            "contribute_id"))
+    @Column(name = "category")
+    private List<Category> categories;
+
+    public enum Category {
+        ROUTINE,
+        SPORT,
+        STUDY,
+        JOB,
+        FAMILY,
+        VACATION,
+        OTHER,
+        HEALTH,
+        SOCIAL,
+        ENTERTAINMENT,
+    }
 }
