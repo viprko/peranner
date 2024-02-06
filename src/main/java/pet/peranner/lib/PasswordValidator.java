@@ -2,8 +2,10 @@ package pet.peranner.lib;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.stereotype.Component;
 import pet.peranner.dto.request.UserRegistrationDto;
 
+@Component
 public class PasswordValidator implements ConstraintValidator<ValidPassword, UserRegistrationDto> {
     private static final int MIN_PASSWORD_SIZE = 8;
 

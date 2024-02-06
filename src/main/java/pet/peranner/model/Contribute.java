@@ -1,5 +1,6 @@
 package pet.peranner.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -16,15 +17,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.mapstruct.control.DeepClone;
 
 @Entity
 @Table(name = "contributes")
 @Getter
 @Setter
-public class Contribute {
+@DeepClone
+public class Contribute implements Cloneable {
     @ManyToOne
     @JoinColumn(name = "user_email")
     private User user;
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "recurrence_id")
+    private Recurrence recurrence;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,15 +38,21 @@ public class Contribute {
     private String description;
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
-    private LocalDateTime actualFinishTime;
-    private boolean isCompleted;
-    private boolean isOutdated;
     @ElementCollection(targetClass = Category.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "contribute_categories", joinColumns = @JoinColumn(name =
             "contribute_id"))
     @Column(name = "category")
     private List<Category> categories;
+
+    @Override
+    public Contribute clone() {
+        try {
+            return (Contribute) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 
     public enum Category {
         ROUTINE,

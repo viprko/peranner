@@ -8,12 +8,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pet.peranner.exception.IllegalPeriodException;
 import pet.peranner.model.Contribute;
 import pet.peranner.model.User;
 import pet.peranner.service.CalendarService;
 import pet.peranner.service.ContributeService;
-import pet.peranner.strategy.PeriodStrategy;
+import pet.peranner.strategy.period.PeriodStrategy;
 
 @Service
 public class CalendarServiceImpl implements CalendarService {
@@ -33,14 +32,8 @@ public class CalendarServiceImpl implements CalendarService {
 
     @Override
     public List<Contribute> findContributesForPeriod(String period, User currentUser) {
-        try {
-            PeriodStrategy periodStrategy = periodStrategyMap.get(period);
-            return periodStrategy.fetchDevoteTimeForPeriod(currentUser);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalPeriodException(
-                    "Invalid period: " + period + ". There are 3 period for pick: "
-                            + System.lineSeparator() + "ten-days, month, year", e);
-        }
+        PeriodStrategy periodStrategy = periodStrategyMap.get(period);
+        return periodStrategy.fetchDevoteTimeForPeriod(currentUser);
     }
 
     @Override

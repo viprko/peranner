@@ -7,7 +7,6 @@ import pet.peranner.model.Contribute;
 
 @Data
 public class ContributeRequestDto {
-    private Long placeId;
     private String title;
     private String description;
     private LocalDateTime startTime;

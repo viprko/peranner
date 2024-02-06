@@ -1,4 +1,4 @@
-package pet.peranner.strategy.impl;
+package pet.peranner.strategy.period.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import pet.peranner.model.Contribute;
 import pet.peranner.model.User;
 import pet.peranner.repository.ContributeRepository;
-import pet.peranner.strategy.PeriodStrategy;
+import pet.peranner.strategy.period.PeriodStrategy;
 
 @Service("ten-days")
 @AllArgsConstructor
