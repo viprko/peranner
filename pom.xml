@@ -20,7 +20,7 @@
         <module>authentication-service</module>
         <module>planner-service</module>
         <module>calendar-service</module>
-        <module>telegram-bot-service</module>
+        <module>telegram-bot</module>
         <module>temporary-transitive-service</module>
     </modules>
     <properties>
@@ -42,7 +42,7 @@
                 <version>${maven.checkstyle.plugin.version}</version>
                 <executions>
                     <execution>
-                        <phase>verify</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
