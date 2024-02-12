@@ -12,12 +12,12 @@ import pet.peranner.model.User;
 @Repository
 public interface ContributeRepository extends JpaRepository<Contribute, Long> {
     @Query("SELECT c FROM Contribute c WHERE c.user = :user")
-    public List<Contribute> findAllByUser(@Param("user") User user);
+    List<Contribute> findAllByUser(@Param("user") User user);
 
     @Query("SELECT c FROM Contribute c WHERE c.user = :user "
             + "AND c.startTime >= :periodStart "
             + "AND c.finishTime < :periodEnd")
-    public List<Contribute> findByPeriod(@Param("periodStart") LocalDateTime periodStart,
-                                         @Param("periodEnd") LocalDateTime periodEnd,
-                                         @Param("user") User currentUser);
+    List<Contribute> findByPeriod(@Param("periodStart") LocalDateTime periodStart,
+                                  @Param("periodEnd") LocalDateTime periodEnd,
+                                  @Param("user") User currentUser);
 }

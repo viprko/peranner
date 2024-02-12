@@ -8,5 +8,5 @@ import pet.peranner.model.Recurrence;
 @Mapper(config = MapperConfig.class)
 public interface RecurrenceMapper {
 
-    public Recurrence toEntity(RecurrenceRequestDto requestDto);
+    Recurrence toEntity(RecurrenceRequestDto requestDto);
 }

@@ -9,7 +9,7 @@ import pet.peranner.model.Contribute;
 @Mapper(config = MapperConfig.class)
 public interface ContributeMapper {
 
-    public ContributeResponseDto toDto(Contribute contribute);
+    ContributeResponseDto toDto(Contribute contribute);
 
-    public Contribute toEntity(ContributeRequestDto requestDto);
+    Contribute toEntity(ContributeRequestDto requestDto);
 }

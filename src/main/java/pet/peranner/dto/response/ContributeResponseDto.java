@@ -8,13 +8,9 @@ import pet.peranner.model.Contribute;
 @Data
 public class ContributeResponseDto {
     private Long id;
-    private Long placeId;
     private String title;
     private String description;
     private LocalDateTime startTime;
     private LocalDateTime finishTime;
-    private LocalDateTime actualFinishTime;
-    private boolean isOutdated;
-    private boolean isCompleted;
     private List<Contribute.Category> categories;
 }

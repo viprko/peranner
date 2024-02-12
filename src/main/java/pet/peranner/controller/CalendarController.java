@@ -109,13 +109,15 @@ public class CalendarController {
 
     @PostMapping("/contributes/recurrence")
     @CurrentUser
+    @Parameter(name = "user", description = "Current authenticated user (automatically injected)",
+            hidden = true)
     public ContributeResponseDto saveWithRecurrence(
             @RequestBody RecurrenceRequestDto recurrenceRequestDto,
             @RequestBody ContributeRequestDto contributeRequestDto,
             User user) {
         return contributeMapper.toDto(contributeService.saveWithRecurrence(
                 recurrenceMapper.toEntity(recurrenceRequestDto),
-                        contributeMapper.toEntity(contributeRequestDto),
-                        user));
+                contributeMapper.toEntity(contributeRequestDto),
+                user));
     }
 }
