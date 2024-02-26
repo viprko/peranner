@@ -2,29 +2,29 @@ package pet.peranner.authenticationservice.security;
 
 import static org.springframework.security.core.userdetails.User.withUsername;
 
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import pet.peranner.model.User;
-import pet.peranner.service.UserService;
+import pet.peranner.authenticationservice.exception.UserNotFoundException;
+import pet.peranner.authenticationservice.model.SecurityUser;
+import pet.peranner.authenticationservice.service.SecurityUserService;
 
 @Service
 @AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-    private final UserService userService;
+    private final SecurityUserService securityUserService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> userOptional = userService.findByEmail(email);
-        if (userOptional.isPresent()) {
+        try {
+            SecurityUser securityUser = securityUserService.findByEmail(email);
             return withUsername(email)
-                    .password(userOptional.get().getPassword())
-                    .roles(userOptional.get().getRole().name())
+                    .password(securityUser.getPassword())
                     .build();
+        } catch (UserNotFoundException e) {
+            throw new UsernameNotFoundException("User not found", e);
         }
-        throw new UsernameNotFoundException("User not found");
     }
 }

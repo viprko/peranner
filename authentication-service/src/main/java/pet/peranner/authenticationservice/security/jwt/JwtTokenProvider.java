@@ -9,22 +9,21 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import pet.peranner.exception.InvalidJwtAuthenticationException;
-import pet.peranner.security.CustomUserDetailsService;
+import pet.peranner.authenticationservice.exception.InvalidJwtAuthenticationException;
+import pet.peranner.authenticationservice.security.CustomUserDetailsService;
 
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
     @Value("${security.jwt.token.secret-key:secret}")
     private String secretKey;
-    @Value("${security.jwt.token.expire-length:604800000}")
+    @Value("${security.jwt.token.expire-length:3600000}")
     private long validityInMilliseconds;
     private final CustomUserDetailsService userDetailsService;
 
@@ -33,9 +32,9 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String email, List<String> roles) {
+    public String createToken(String email, Long id) {
         Claims claims = Jwts.claims().setSubject(email);
-        claims.put("roles", roles);
+        claims.put("userId", id);
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
         return Jwts.builder()
@@ -44,6 +43,11 @@ public class JwtTokenProvider {
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+    }
+
+    public Long getUserId(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("userId",
+                Long.class);
     }
 
     public Authentication getAuthentication(String token) {
@@ -64,7 +68,7 @@ public class JwtTokenProvider {
         return null;
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token) throws InvalidJwtAuthenticationException {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());

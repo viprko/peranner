@@ -1,47 +1,56 @@
 package pet.peranner.authenticationservice.security;
 
-import static pet.peranner.model.User.Role;
-
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pet.peranner.dto.request.UserRegistrationDto;
-import pet.peranner.exception.AuthenticationException;
-import pet.peranner.exception.UserAlreadyExistException;
-import pet.peranner.model.User;
-import pet.peranner.service.UserService;
+import pet.peranner.authenticationservice.dto.request.SecurityUserRegistrationDto;
+import pet.peranner.authenticationservice.exception.AuthenticationException;
+import pet.peranner.authenticationservice.exception.UserAlreadyExistException;
+import pet.peranner.authenticationservice.exception.UserNotFoundException;
+import pet.peranner.authenticationservice.model.SecurityUser;
+import pet.peranner.authenticationservice.service.SecurityUserService;
 
 @Service
 @AllArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private static final Role DEFAULT_ROLE = Role.USER;
-    private final UserService userService;
+    private final SecurityUserService securityUserService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public User register(UserRegistrationDto userRegistrationDto) {
-        if (userService.isPresentByEmail(userRegistrationDto.getEmail())) {
-            throw new UserAlreadyExistException("User with such email already exist");
+    public SecurityUser register(SecurityUserRegistrationDto securityUserRegistrationDto) {
+        if (securityUserService.isPresentByEmail(securityUserRegistrationDto.getEmail())) {
+            throw new UserAlreadyExistException(String.format("User with email: [%s] already "
+                    + "exist", securityUserRegistrationDto.getEmail()));
         }
-        User user = new User();
-        user
-                .setAge(userRegistrationDto.getAge())
-                .setEmail(userRegistrationDto.getEmail())
-                .setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()))
-                .setFirstName(userRegistrationDto.getFirstName())
-                .setLastName(userRegistrationDto.getLastName())
-                .setRole(DEFAULT_ROLE);
-        return userService.save(user);
+        SecurityUser securityUser = new SecurityUser();
+        securityUser.setEmail(securityUserRegistrationDto.getEmail());
+        securityUser
+                .setPassword(passwordEncoder.encode(securityUserRegistrationDto.getPassword()));
+        Optional.ofNullable(securityUserRegistrationDto.getTelegramId())
+                .ifPresent(securityUser::setTelegramId);
+        return securityUserService.save(securityUser);
     }
 
     @Override
-    public User login(String email, String password) throws AuthenticationException {
-        Optional<User> userOptional = userService.findByEmail(email);
-        if (userOptional.isEmpty() || !passwordEncoder.matches(password,
-                userOptional.get().getPassword())) {
-            throw new AuthenticationException("Incorrect user email or password");
+    public SecurityUser login(String email, String password) throws AuthenticationException {
+        try {
+            SecurityUser securityUser = securityUserService.findByEmail(email);
+            if (!passwordEncoder.matches(password, securityUser.getPassword())) {
+                throw new AuthenticationException("Incorrect user email or password");
+            }
+            return securityUser;
+        } catch (UserNotFoundException e) {
+            throw new AuthenticationException(e.getMessage());
+        } catch (Exception e) {
+            throw new AuthenticationException("Failed to authenticate user");
         }
-        return userOptional.get();
+    }
+
+    @Override
+    public boolean updatePassword(Long userId, String currentPassword, String newPassword) {
+        return securityUserService.updatePassword(userId,
+                passwordEncoder.encode(currentPassword),
+                passwordEncoder.encode(newPassword));
     }
 }

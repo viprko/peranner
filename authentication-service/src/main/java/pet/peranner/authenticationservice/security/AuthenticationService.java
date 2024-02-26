@@ -1,11 +1,12 @@
 package pet.peranner.authenticationservice.security;
 
-import pet.peranner.dto.request.UserRegistrationDto;
-import pet.peranner.exception.AuthenticationException;
-import pet.peranner.model.User;
+import pet.peranner.authenticationservice.dto.request.SecurityUserRegistrationDto;
+import pet.peranner.authenticationservice.model.SecurityUser;
 
 public interface AuthenticationService {
-    User register(UserRegistrationDto user);
+    SecurityUser register(SecurityUserRegistrationDto securityUserRegistrationDto);
 
-    User login(String login, String password) throws AuthenticationException;
+    SecurityUser login(String email, String password);
+
+    boolean updatePassword(Long userId, String currentPassword, String newPassword);
 }

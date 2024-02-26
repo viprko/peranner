@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+        file: db.changelog/changes/create-recurrence-table.sql
+  - include:
+      file: db.changelog/changes/create-contribute-table.sql
+  - include:
+      file: db.changelog/changes/create-contribute-categories-table.sql
+  - include:
+      file: db.changelog/changes/create-recurrence-month-days-table.sql
+  - include:
+      file: db.changelog/changes/create-recurrence-week-days-table.sql

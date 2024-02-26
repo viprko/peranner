@@ -1,44 +1,74 @@
 package pet.peranner.authenticationservice.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import pet.peranner.dto.request.UserLoginDto;
-import pet.peranner.dto.request.UserRegistrationDto;
-import pet.peranner.dto.response.UserResponseDto;
-import pet.peranner.exception.AuthenticationException;
-import pet.peranner.model.User;
-import pet.peranner.security.AuthenticationService;
-import pet.peranner.security.jwt.JwtTokenProvider;
-import pet.peranner.service.mapper.UserMapper;
+import pet.peranner.authenticationservice.dto.request.PasswordUpdateDto;
+import pet.peranner.authenticationservice.dto.request.SecurityUserLoginDto;
+import pet.peranner.authenticationservice.dto.request.SecurityUserRegistrationDto;
+import pet.peranner.authenticationservice.dto.response.SecurityUserResponseDto;
+import pet.peranner.authenticationservice.exception.AuthenticationException;
+import pet.peranner.authenticationservice.exception.InvalidJwtAuthenticationException;
+import pet.peranner.authenticationservice.model.SecurityUser;
+import pet.peranner.authenticationservice.security.AuthenticationService;
+import pet.peranner.authenticationservice.security.jwt.JwtTokenProvider;
+import pet.peranner.authenticationservice.service.mapper.SecurityUserMapper;
 
 @RestController
 @AllArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
-    private final UserMapper userMapper;
+    private final SecurityUserMapper securityUserMapper;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> register(
-            @RequestBody @Valid UserRegistrationDto userRegistrationDto) {
-        User registeredUser = authenticationService.register(userRegistrationDto);
-        return new ResponseEntity<>(userMapper.toDto(registeredUser), HttpStatus.OK);
+    @ResponseStatus(HttpStatus.CREATED)
+    public SecurityUserResponseDto register(
+            @RequestBody @Valid SecurityUserRegistrationDto userRegistrationDto) {
+        SecurityUser registeredUser = authenticationService.register(userRegistrationDto);
+        return securityUserMapper.toDto(registeredUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody @Valid UserLoginDto userLoginDto) throws
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> login(
+            @RequestBody @Valid SecurityUserLoginDto securityUserLoginDto) throws
             AuthenticationException {
-        User user = authenticationService.login(userLoginDto.getEmail(),
-                userLoginDto.getPassword());
-        String token = jwtTokenProvider.createToken(user.getEmail(),
-                List.of(user.getRole().name()));
+        SecurityUser securityUser = authenticationService.login(securityUserLoginDto.getEmail(),
+                securityUserLoginDto.getPassword());
+        String token = jwtTokenProvider.createToken(securityUser.getEmail(), securityUser.getId());
         return new ResponseEntity<>(Map.of("token", token), HttpStatus.OK);
+    }
+
+    @PostMapping("/password/change")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public boolean updatePassword(
+            HttpServletRequest request,
+            @RequestBody PasswordUpdateDto passwordUpdateDto) {
+        String token = jwtTokenProvider.resolveToken(request);
+        Long userId = jwtTokenProvider.getUserId(token);
+        return authenticationService.updatePassword(userId, passwordUpdateDto.getOldPassword(),
+                passwordUpdateDto.getPassword());
+    }
+
+    @GetMapping("/token/verify")
+    public ResponseEntity<Long> verifyToken(@RequestHeader("Authorization") String token) {
+        try {
+            if (jwtTokenProvider.validateToken(token)) {
+                return ResponseEntity.ok(jwtTokenProvider.getUserId(token));
+            }
+        } catch (InvalidJwtAuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
