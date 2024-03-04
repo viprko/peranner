@@ -19,7 +19,7 @@ import pet.peranner.contributeservice.exception.AuthenticationException;
 
 @Component
 @AllArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class AuthenticationFilter extends OncePerRequestFilter {
     private static final String AUTHENTICATION_SERVICE_VERIFY_TOKEN_URI =
             "http://authenticaton-service/token/verify";
     private static final String AUTHENTICATION_SERVICE_LOGIN_URI =
@@ -38,6 +38,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
+        }
+        Optional<Long> userId = Optional.ofNullable((Long) request.getAttribute("userId"));
+        if (userId.isPresent()) {
+            filterChain.doFilter(request, response);
         }
         response.sendRedirect(AUTHENTICATION_SERVICE_LOGIN_URI);
     }

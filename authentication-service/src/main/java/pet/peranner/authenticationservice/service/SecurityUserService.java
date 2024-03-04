@@ -12,4 +12,6 @@ public interface SecurityUserService {
     SecurityUser updateTelegramId(String telegramId);
 
     boolean isPresentByEmail(String email);
+
+    Long findUserIdByTelegramId(Long telegramUserId);
 }

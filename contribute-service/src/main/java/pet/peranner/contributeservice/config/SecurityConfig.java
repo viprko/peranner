@@ -9,13 +9,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import pet.peranner.contributeservice.security.JwtAuthenticationFilter;
+import pet.peranner.contributeservice.security.AuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
 public class SecurityConfig {
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationFilter authenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -24,13 +24,8 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers(
-                                        "/swagger-resources/**",
-                                        "/api-docs/**",
-                                        "/swagger-ui/**")
-                                .permitAll()
-                                .anyRequest().authenticated());
-        httpSecurity.addFilterBefore(jwtAuthenticationFilter,
+                                .anyRequest().permitAll());
+        httpSecurity.addFilterBefore(authenticationFilter,
                 UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }

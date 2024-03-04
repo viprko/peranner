@@ -50,4 +50,12 @@ public class SecurityUserServiceImpl implements SecurityUserService {
     public boolean isPresentByEmail(String email) {
         return securityUserRepository.findByEmail(email).isPresent();
     }
+
+    @Override
+    public Long findUserIdByTelegramId(Long telegramUserId) throws UserNotFoundException {
+        return securityUserRepository.findByTelegramId(telegramUserId).orElseThrow(
+                () -> new UserNotFoundException(
+                        String.format("User with telegram id: [%d] was not found",
+                                telegramUserId)));
+    }
 }

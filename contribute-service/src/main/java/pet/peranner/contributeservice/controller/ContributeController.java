@@ -32,7 +32,7 @@ public class ContributeController {
     private final ContributeMapper contributeMapper;
     private final RecurrenceMapper recurrenceMapper;
 
-    @GetMapping("/period")
+    @GetMapping
     public List<ContributeResponseDto> getScheduleForPeriod(
             @RequestParam(name = "period", defaultValue = "today")
             @ValidPeriod String period,

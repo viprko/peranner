@@ -9,14 +9,14 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import pet.peranner.contributeservice.security.JwtAuthenticationFilter;
+import pet.peranner.contributeservice.security.AuthenticationFilter;
 
 @Aspect
 @Component
 @AllArgsConstructor
 public class CurrentUserAspect {
     private static final String ATTRIBUTE_NAME = "userId";
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AuthenticationFilter authenticationFilter;
 
     @Around("@annotation(pet.peranner.contributeservice.annotation.CurrentUser)")
     public Object injectCurrentUser(ProceedingJoinPoint joinPoint) throws Throwable {

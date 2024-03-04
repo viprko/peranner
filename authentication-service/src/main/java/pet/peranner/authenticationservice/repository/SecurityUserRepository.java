@@ -19,4 +19,7 @@ public interface SecurityUserRepository extends JpaRepository<SecurityUser, Long
     int updatePassword(@Param("userId") Long userId,
                        @Param("currentPassword") String currentPassword,
                        @Param("newPassword") String newPassword);
+
+    @Query("SELECT su.id FROM SecurityUser su WHERE su.telegramId = :telegramId")
+    Optional<Long> findByTelegramId(@Param("telegramId") Long telegramId);
 }

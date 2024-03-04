@@ -18,9 +18,11 @@ import pet.peranner.authenticationservice.dto.request.SecurityUserRegistrationDt
 import pet.peranner.authenticationservice.dto.response.SecurityUserResponseDto;
 import pet.peranner.authenticationservice.exception.AuthenticationException;
 import pet.peranner.authenticationservice.exception.InvalidJwtAuthenticationException;
+import pet.peranner.authenticationservice.exception.UserNotFoundException;
 import pet.peranner.authenticationservice.model.SecurityUser;
 import pet.peranner.authenticationservice.security.AuthenticationService;
 import pet.peranner.authenticationservice.security.jwt.JwtTokenProvider;
+import pet.peranner.authenticationservice.service.SecurityUserService;
 import pet.peranner.authenticationservice.service.mapper.SecurityUserMapper;
 
 @RestController
@@ -29,6 +31,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final SecurityUserMapper securityUserMapper;
     private final JwtTokenProvider jwtTokenProvider;
+    private final SecurityUserService securityUserService;
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
@@ -70,5 +73,17 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @GetMapping("/telegram/verify")
+    public ResponseEntity<Long> verifyTelegramUser(
+            @RequestHeader("X-Telegram-UserId") String telegramUserId) {
+        try {
+            Long userIdByTelegramId =
+                    securityUserService.findUserIdByTelegramId(Long.valueOf(telegramUserId));
+            return ResponseEntity.ok(userIdByTelegramId);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 }
