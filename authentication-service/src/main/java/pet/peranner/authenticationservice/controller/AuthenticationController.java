@@ -86,4 +86,9 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
+
+    @GetMapping("/health-check")
+    public String healthCheck() {
+        return "authentication-service response to your request";
+    }
 }

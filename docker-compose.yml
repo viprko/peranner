@@ -1,0 +1,93 @@
+services:
+  peranner_mysql:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "${MYSQL_EXTERNAL_PORT}:${MYSQL_INTERNAL_PORT}"
+    env_file:
+      - .env
+
+  redis:
+    image: redis
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    env_file:
+      - .env
+
+  eureka_server:
+    build:
+      context: eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "${EUREKA_SERVER_PORT}:${EUREKA_SERVER_PORT}"
+    env_file:
+      - eureka-server/.env
+
+  api_gateway:
+    build:
+      context: api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
+    depends_on:
+      eureka_server:
+        condition: service_started
+      authentication_service:
+        condition: service_started
+      user_profile_service:
+        condition: service_started
+      contribute_service:
+        condition: service_started
+    env_file:
+      - api-gateway/.env
+
+  authentication_service:
+    build:
+      context: authentication-service
+      dockerfile: Dockerfile
+    depends_on:
+      peranner_mysql:
+        condition: service_started
+      eureka_server:
+        condition: service_started
+    env_file:
+      - authentication-service/.env
+
+
+  user_profile_service:
+    build:
+      context: user-profile-service
+      dockerfile: Dockerfile
+    depends_on:
+      peranner_mysql:
+        condition: service_started
+      eureka_server:
+        condition: service_started
+    env_file:
+      - user-profile-service/.env
+
+  contribute_service:
+    build:
+      context: contribute-service
+      dockerfile: Dockerfile
+    depends_on:
+      peranner_mysql:
+        condition: service_started
+      eureka_server:
+        condition: service_started
+    env_file:
+      - contribute-service/.env
+
+  telegram_bot:
+    build:
+      context: telegram-bot
+      dockerfile: Dockerfile
+    ports:
+      - "${TELEGRAM_BOT_PORT}:${TELEGRAM_BOT_PORT}"
+    depends_on:
+      redis:
+        condition: service_started
+    env_file:
+      - telegram-bot/.env

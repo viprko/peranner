@@ -22,7 +22,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RequiredArgsConstructor
 public class TelegramBotAuthAspect {
     private static final String
-            AUTH_SERVICE_VERIFY_TELEGRAM_USER_URI = "http://authentication-service/telegram/verify";
+            AUTH_SERVICE_VERIFY_TELEGRAM_USER_URI =
+            "http://localhost:8765/authentication-service/telegram/verify";
     private static final String PREFIX_OF_USER_ID_DEPENDENCY = "TelegramUserId";
     private static final Duration CACHE_EXPIRATION_TIME = Duration.ofMinutes(15);
     private static final Long CACHE_EXPIRATION_TIME_THRESHOLD = 1L;

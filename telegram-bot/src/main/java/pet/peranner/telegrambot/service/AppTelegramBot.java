@@ -10,13 +10,13 @@ import pet.peranner.telegrambot.config.TelegramBotConfig;
 import pet.peranner.telegrambot.strategy.BotCommandHandler;
 
 @Service
-public class AppTelegramBotImpl extends TelegramLongPollingBot {
+public class AppTelegramBot extends TelegramLongPollingBot {
     private final TelegramBotConfig telegramBotConfig;
     private final StrategyManager strategyManager;
 
     @Autowired
-    public AppTelegramBotImpl(TelegramBotConfig telegramBotConfig,
-                              StrategyManager strategyManager) {
+    public AppTelegramBot(TelegramBotConfig telegramBotConfig,
+                          StrategyManager strategyManager) {
         super(telegramBotConfig.getBotToken());
         this.telegramBotConfig = telegramBotConfig;
         this.strategyManager = strategyManager;
