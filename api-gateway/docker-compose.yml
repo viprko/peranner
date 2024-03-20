@@ -1,9 +1,0 @@
-services:
-  api-gateway:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "${API_GATEWAY_PORT}:${API_GATEWAY_PORT}"
-    env_file:
-      - .env
