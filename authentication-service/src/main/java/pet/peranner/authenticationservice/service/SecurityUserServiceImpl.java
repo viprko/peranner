@@ -42,8 +42,9 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 
     @Override
     @Transactional
-    public SecurityUser updateTelegramId(String telegramId) {
-        return null;
+    public SecurityUser updateTelegramId(String telegramId, SecurityUser securityUser) {
+        securityUser.setTelegramId(telegramId);
+        return securityUserRepository.save(securityUser);
     }
 
     @Override

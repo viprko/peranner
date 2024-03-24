@@ -9,7 +9,7 @@ public interface SecurityUserService {
 
     boolean updatePassword(Long userId, String currentPassword, String newPassword);
 
-    SecurityUser updateTelegramId(String telegramId);
+    SecurityUser updateTelegramId(String telegramId, SecurityUser securityUser);
 
     boolean isPresentByEmail(String email);
 

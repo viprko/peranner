@@ -1,6 +1,5 @@
 package pet.peranner.authenticationservice.security;
 
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,8 +26,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         securityUser.setEmail(securityUserRegistrationDto.getEmail());
         securityUser
                 .setPassword(passwordEncoder.encode(securityUserRegistrationDto.getPassword()));
-        Optional.ofNullable(securityUserRegistrationDto.getTelegramId())
-                .ifPresent(securityUser::setTelegramId);
         return securityUserService.save(securityUser);
     }
 

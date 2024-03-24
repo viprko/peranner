@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pet.peranner.authenticationservice.dto.request.PasswordUpdateDto;
 import pet.peranner.authenticationservice.dto.request.SecurityUserLoginDto;
 import pet.peranner.authenticationservice.dto.request.SecurityUserRegistrationDto;
+import pet.peranner.authenticationservice.dto.request.TelegramUserBindingDto;
 import pet.peranner.authenticationservice.dto.response.SecurityUserResponseDto;
 import pet.peranner.authenticationservice.exception.AuthenticationException;
 import pet.peranner.authenticationservice.exception.InvalidJwtAuthenticationException;
@@ -85,6 +86,15 @@ public class AuthenticationController {
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    @PostMapping("telegram/bind")
+    public ResponseEntity<SecurityUserResponseDto> bindTelegramIdToUser(
+            @RequestBody TelegramUserBindingDto telegramUserBindingDto) {
+        SecurityUser securityUser = authenticationService.login(telegramUserBindingDto.getEmail(),
+                telegramUserBindingDto.getPassword());
+        securityUserService.updateTelegramId(telegramUserBindingDto.getTelegramId(), securityUser);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/health-check")
