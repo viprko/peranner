@@ -27,14 +27,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
                                 .requestMatchers(
-                                        "/register",
-                                        "/login",
-                                        "/swagger-resources/**",
-                                        "/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/health-check")
-                                .permitAll()
-                                .anyRequest().authenticated())
+                                        "/password/change")
+                                .authenticated()
+                                .anyRequest().permitAll())
                 .with(jwtConfigurer(), Customizer.withDefaults());
         httpSecurity.addFilterBefore(jwtTokenFilter(),
                 UsernamePasswordAuthenticationFilter.class);
