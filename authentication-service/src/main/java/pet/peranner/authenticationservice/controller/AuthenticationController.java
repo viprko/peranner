@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.Map;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ import pet.peranner.authenticationservice.service.mapper.SecurityUserMapper;
 
 @RestController
 @AllArgsConstructor
+@Slf4j
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final SecurityUserMapper securityUserMapper;
@@ -79,9 +81,12 @@ public class AuthenticationController {
     @GetMapping("/telegram/verify")
     public ResponseEntity<Long> verifyTelegramUser(
             @RequestHeader("X-Telegram-UserId") String telegramUserId) {
+        log.debug("Received request for verify telegram user with header: {}", telegramUserId);
         try {
             Long userIdByTelegramId =
-                    securityUserService.findUserIdByTelegramId(Long.valueOf(telegramUserId));
+                    securityUserService.findUserIdByTelegramId(telegramUserId);
+            log.debug("Try to found user by telegram id. The result user id = {}",
+                    userIdByTelegramId);
             return ResponseEntity.ok(userIdByTelegramId);
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

@@ -53,10 +53,10 @@ public class SecurityUserServiceImpl implements SecurityUserService {
     }
 
     @Override
-    public Long findUserIdByTelegramId(Long telegramUserId) throws UserNotFoundException {
+    public Long findUserIdByTelegramId(String telegramUserId) throws UserNotFoundException {
         return securityUserRepository.findByTelegramId(telegramUserId).orElseThrow(
                 () -> new UserNotFoundException(
-                        String.format("User with telegram id: [%d] was not found",
+                        String.format("User with telegram id: [%s] was not found",
                                 telegramUserId)));
     }
 }
