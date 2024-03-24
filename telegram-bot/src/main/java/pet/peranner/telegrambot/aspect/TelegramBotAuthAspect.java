@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -20,6 +21,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Aspect
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class TelegramBotAuthAspect {
     private static final String
             AUTH_SERVICE_VERIFY_TELEGRAM_USER_URI =
@@ -33,7 +35,9 @@ public class TelegramBotAuthAspect {
 
     @Around("execution(* pet.peranner.telegrambot.strategy.*.*(..))")
     public Object checkTelegramUserId(ProceedingJoinPoint joinPoint) throws Throwable {
+        log.info("Aspect was called");
         Optional<Long> telegramUserId = extractTelegramUserId(joinPoint);
+        log.info("telegram user id = {}", telegramUserId);
         if (telegramUserId.isPresent()) {
             Optional<Long> cachedUserId = getCachedUserId(telegramUserId.get());
             if (cachedUserId.isPresent()) {
@@ -63,6 +67,7 @@ public class TelegramBotAuthAspect {
 
     private Object proceedWithUserId(ProceedingJoinPoint joinPoint, Long userId)
             throws Throwable {
+        log.info("Proceed join point interrupting with user id = {}", userId);
         Object[] args = Arrays.stream(joinPoint.getArgs())
                 .map(arg -> arg instanceof Long ? userId : arg)
                 .toArray();
@@ -95,11 +100,15 @@ public class TelegramBotAuthAspect {
     private Optional<Long> getUserIdFromAuthService(Long telegramUserId) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(TELEGRAM_USER_HEADER, telegramUserId.toString());
+        log.info("Header with telegram user id = {}{} and already set",
+                headers.get(TELEGRAM_USER_HEADER),
+                System.lineSeparator());
         HttpEntity<?> entity = new HttpEntity<>(headers);
         ResponseEntity<Long> exchange =
                 restTemplate.exchange(AUTH_SERVICE_VERIFY_TELEGRAM_USER_URI, HttpMethod.GET,
                         entity,
                         Long.class);
+        log.info("Get user id from exchange: {}", exchange.getBody());
         return Optional.ofNullable(exchange.getBody());
     }
 }

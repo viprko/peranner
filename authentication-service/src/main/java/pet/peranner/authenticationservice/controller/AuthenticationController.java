@@ -81,11 +81,11 @@ public class AuthenticationController {
     @GetMapping("/telegram/verify")
     public ResponseEntity<Long> verifyTelegramUser(
             @RequestHeader("X-Telegram-UserId") String telegramUserId) {
-        log.debug("Received request for verify telegram user with header: {}", telegramUserId);
+        log.info("Received request for verify telegram user with header: {}", telegramUserId);
         try {
             Long userIdByTelegramId =
                     securityUserService.findUserIdByTelegramId(telegramUserId);
-            log.debug("Try to found user by telegram id. The result user id = {}",
+            log.info("Try to found user by telegram id. The result user id = {}",
                     userIdByTelegramId);
             return ResponseEntity.ok(userIdByTelegramId);
         } catch (UserNotFoundException e) {
