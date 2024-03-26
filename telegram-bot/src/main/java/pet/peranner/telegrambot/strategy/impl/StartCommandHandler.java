@@ -12,6 +12,7 @@ import pet.peranner.telegrambot.strategy.BotCommandHandler;
 @AllArgsConstructor
 @Slf4j
 public class StartCommandHandler implements BotCommandHandler {
+    private static final String REGISTER_LINK = "http://176.116.193.107:8085/register";
     private final TelegramBotConfig telegramBotConfig;
 
     @Override
@@ -19,18 +20,19 @@ public class StartCommandHandler implements BotCommandHandler {
         log.info("user id at start of method execution = {}", userId);
         Long chatId = update.getMessage().getChatId();
         String firstName = update.getMessage().getFrom().getFirstName();
-        return userId != null
-                ? SendMessage.builder()
-                .chatId(chatId)
-                .text(String.format(
-                        "Hello %s. Welcome to %s. Type /help if you need assistance",
-                        firstName, telegramBotConfig.getBotUsername()))
-                .build() :
-                SendMessage.builder()
-                        .chatId(chatId)
-                        .text("Sorry, I'm afraid I haven’t had the pleasure of meeting you yet."
-                                + System.lineSeparator()
-                                + "Authentication link will be here in future")
-                        .build();
+        SendMessage sendMessage = new SendMessage();
+        if (userId != null) {
+            sendMessage.setChatId(chatId);
+            sendMessage.setText(String.format(
+                    "Hello %s. Welcome to %s. Type /help if you need assistance",
+                    firstName, telegramBotConfig.getBotUsername()));
+        } else {
+            sendMessage.setChatId(chatId);
+            sendMessage.setText("Sorry, I'm afraid I haven’t had the pleasure of meeting you yet."
+                    + System.lineSeparator()
+                    + "Click [here](" + REGISTER_LINK + ") to sign up to Peranner");
+            sendMessage.enableMarkdown(true);
+        }
+        return sendMessage;
     }
 }

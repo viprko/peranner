@@ -15,15 +15,17 @@ import pet.peranner.telegrambot.strategy.BotCommandHandler;
 @Service("/schedule-today")
 @AllArgsConstructor
 public class ScheduleTodayCommandHandler implements BotCommandHandler {
-    private static final String
-            CONTRIBUTE_SERVICE_URI = "http://contribute-service/schedule?period=today";
+    private static final String CONTRIBUTE_SERVICE_URI =
+            "/contribute-service/schedule?period=today";
     private final RestTemplate restTemplate;
+    private final String apiGatewayUrl;
 
     @Override
     public SendMessage handleBotCommand(Update update, Long userId) {
         HttpEntity<Long> httpEntity = new HttpEntity<>(userId);
         List<ContributeResponseDto> schedule =
-                restTemplate.exchange(CONTRIBUTE_SERVICE_URI, HttpMethod.GET, httpEntity,
+                restTemplate.exchange(apiGatewayUrl + CONTRIBUTE_SERVICE_URI, HttpMethod.GET,
+                        httpEntity,
                         new ParameterizedTypeReference<List<ContributeResponseDto>>() {
                         }).getBody();
         StringBuilder messageBuilder = new StringBuilder();

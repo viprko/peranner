@@ -6,14 +6,15 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private static final String BIND_TELEGRAM_ID_URI = "http://localhost:4200/telegram/bind"
+    private static final String BIND_TELEGRAM_ID_URI = "http://176.116.193.107:8085/telegram/bind"
             + "?telegramId=";
 
     @Override
     public SendMessage bindTelegramIdToUser(Update update) {
-        return SendMessage.builder()
-                .chatId(update.getMessage().getChatId())
-                .text(BIND_TELEGRAM_ID_URI + update.getMessage().getFrom().getId())
-                .build();
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.enableMarkdown(true);
+        sendMessage.setChatId(update.getMessage().getChatId());
+        sendMessage.setText("Click [here](" + BIND_TELEGRAM_ID_URI + ") for bind your Telegram");
+        return sendMessage;
     }
 }
