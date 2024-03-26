@@ -11,10 +11,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public SendMessage bindTelegramIdToUser(Update update) {
+        Long telegramId = update.getMessage().getFrom().getId();
         SendMessage sendMessage = new SendMessage();
         sendMessage.enableMarkdown(true);
         sendMessage.setChatId(update.getMessage().getChatId());
-        sendMessage.setText("Click [here](" + BIND_TELEGRAM_ID_URI + ") for bind your Telegram");
+        sendMessage.setText("Click [here](" + BIND_TELEGRAM_ID_URI + telegramId
+                + ") for bind your Telegram");
         return sendMessage;
     }
 }
