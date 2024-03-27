@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -40,6 +39,7 @@ public class TelegramBotAuthAspect {
         log.info("telegram user id = {}", telegramUserId);
         if (telegramUserId.isPresent()) {
             Optional<Long> cachedUserId = getCachedUserId(telegramUserId.get());
+            log.info("Cached user is = {}", cachedUserId);
             if (cachedUserId.isPresent()) {
                 if (!isCacheBreakExpirationThreshold(telegramUserId.get())) {
                     refreshCachedUserIdExpirationTime(telegramUserId.get());
@@ -54,7 +54,7 @@ public class TelegramBotAuthAspect {
                 }
             }
         }
-        throw new AuthenticationException("Failed to verify telegram user");
+        return proceedWithUserId(joinPoint, null);
     }
 
     private Optional<Long> extractTelegramUserId(ProceedingJoinPoint joinPoint) {
